@@ -9,7 +9,11 @@ export const wifi_init = () => {
   const getSignalLevel = async (): Promise<number> =>
     wifi
       .getCurrentConnections()
-      .then((conn: Connections) => conn[0].signal_level)
+      .then((conn: Connections) => {
+        const signal_level = conn[0].signal_level;
+        console.log("Signal Level", signal_level);
+        return signal_level;
+      })
       .catch(() => {
         console.error("Error: Getting wifi signal level");
       });

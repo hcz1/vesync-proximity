@@ -3,5 +3,7 @@ export const outsideRoom = (signal_level: number) =>
   signal_level <= OUTSIDE_THRESHOLD;
 export const userRoomStatusStr = (isOutsideRoom: boolean) =>
   isOutsideRoom ? "outside" : "inside";
-export const logUserRoomStats = (isOutsideRoom: boolean) =>
+export const logUserRoomStatus = (isOutsideRoom: boolean) =>
   console.log(`User is ${userRoomStatusStr(isOutsideRoom)} room`);
+export const logAttempt = (attemptStr: string) => `Attempt: ${attemptStr}`;
+export const logSuccess = (attemptStr: string) => `Success: ${attemptStr}`;
