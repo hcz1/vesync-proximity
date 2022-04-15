@@ -1,14 +1,16 @@
 import init from "./init";
-
 import { outsideRoom } from "./utils";
 
 const run = async () => {
-  const { fanPowerStatus, getSignalLevel, handleRoomFanStatus } = await init();
-  const signal_level = await getSignalLevel();
-  const isFanOn = await fanPowerStatus();
+  const {
+    fanPowerStatus,
+    getSignalLevel,
+    handleRoomFanStatus,
+    initialRoomStatus,
+  } = await init();
   let isActive = false;
-  let isOutsideRoom = outsideRoom(signal_level);
-  await handleRoomFanStatus(isOutsideRoom, isFanOn);
+  let isOutsideRoom = initialRoomStatus;
+
   setInterval(async () => {
     if (!isActive) {
       isActive = true;

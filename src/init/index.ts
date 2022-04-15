@@ -1,11 +1,17 @@
 import "dotenv/config";
-import { logAttempt, logSuccess, logUserRoomStatus } from "../utils";
+import {
+  logAttempt,
+  logSuccess,
+  logUserRoomStatus,
+  outsideRoom,
+} from "../utils";
 import vesync_init from "./vesync_init";
 import { wifi_init } from "./wifi_init";
 
 const init = async () => {
   const vesyncApi = await vesync_init();
   const getSignalLevel = wifi_init();
+
   const handleInsideRoom = async () => {
     logAttempt("Turn fan on");
     await vesyncApi.sendMessage(true).catch(() => {
@@ -31,7 +37,18 @@ const init = async () => {
       await handleInsideRoom();
     }
   };
-  return { ...vesyncApi, getSignalLevel, handleRoomFanStatus };
+
+  const signal_level = await getSignalLevel();
+  let isOutsideRoom = outsideRoom(signal_level);
+  const isFanOn = await vesyncApi.fanPowerStatus();
+  await handleRoomFanStatus(isOutsideRoom, isFanOn);
+
+  return {
+    fanPowerStatus: vesyncApi.fanPowerStatus,
+    getSignalLevel,
+    handleRoomFanStatus,
+    initialRoomStatus: isOutsideRoom,
+  };
 };
 
 export default init;
